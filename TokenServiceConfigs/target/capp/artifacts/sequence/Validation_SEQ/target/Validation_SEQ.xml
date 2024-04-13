@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="Validation_SEQ" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+    <switch source="$ctx:ValidationOperation">
+        <case regex="TokenType">
+            <switch source="$ctx:ValidationTokenType">
+                <case regex="Email">
+                    <filter xpath="boolean($ctx:ValidationUserToken)">
+                        <then>
+                            <filter regex="^[a-zA-Z0-9.+_-]{3,}@[a-zA-Z0-9.-]{1,}\.[a-zA-Z]{2,}$" source="get-property('ValidationUserToken')">
+                                <then>
+                                    <property name="TokenTypeValidationResult" scope="default" type="STRING" value="success"/>
+                                </then>
+                                <else>
+                                    <property name="TokenValidationErrCode" scope="default" type="INTEGER" value="700"/>
+                                </else>
+                            </filter>
+                        </then>
+                        <else>
+                            <property name="TokenValidationErrCode" scope="default" type="INTEGER" value="701"/>
+                        </else>
+                    </filter>
+                </case>
+                <case regex="MobPhone">
+                    <filter xpath="boolean($ctx:ValidationUserToken)">
+                        <then>
+                            <filter regex="^[1]{1}\d{10}$" source="get-property('ValidationUserToken')">
+                                <then>
+                                    <property name="TokenTypeValidationResult" scope="default" type="STRING" value="success"/>
+                                </then>
+                                <else>
+                                    <property name="TokenValidationErrCode" scope="default" type="INTEGER" value="700"/>
+                                </else>
+                            </filter>
+                        </then>
+                        <else>
+                            <property name="TokenValidationErrCode" scope="default" type="INTEGER" value="701"/>
+                        </else>
+                    </filter>
+                </case>
+                <default/>
+            </switch>
+        </case>
+        <default/>
+    </switch>
+</sequence>

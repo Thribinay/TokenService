@@ -1,0 +1,11 @@
+---
+key: "Token_API-1.0.0"
+name : "Token_API"
+displayName : "Token_API"
+description: "Sample API"
+version: "1.0.0"
+serviceUrl: "https://{MI_HOST}:{MI_PORT}/token/ei"
+definitionType: "OAS3"
+securityType: "BASIC"
+mutualSSLEnabled: false
+apiId : "null"

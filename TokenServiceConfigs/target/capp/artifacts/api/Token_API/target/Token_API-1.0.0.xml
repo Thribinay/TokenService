@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/token/ei" name="Token_API" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="POST">
+        <inSequence>
+            <property name="ValidationOperation" scope="default" type="STRING" value="TokenType"/>
+            <property expression="json-eval($.UserToken)" name="ValidationUserToken" scope="default" type="STRING"/>
+            <property expression="json-eval($.UserTokenType)" name="ValidationTokenType" scope="default" type="STRING"/>
+            <sequence key="Validation_SEQ"/>
+            <switch source="$ctx:TokenTypeValidationResult">
+                <case regex="success">
+                    <payloadFactory media-type="json">
+                        <format>
+
+                {
+
+                "Message":"Token created successfully"
+
+                }
+
+                </format>
+                        <args/>
+                    </payloadFactory>
+                </case>
+                <default/>
+            </switch>
+            <switch source="$ctx:TokenValidationErrCode">
+                <case regex="700">
+                    <payloadFactory media-type="json">
+                        <format>
+
+                {
+
+                "Message":"Validation failed for Mobile or Email Id"
+
+                }
+
+                </format>
+                        <args/>
+                    </payloadFactory>
+                </case>
+                <default/>
+            </switch>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+</api>
